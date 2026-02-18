@@ -40,25 +40,39 @@
 
             async function sendData(){
                 const formData = new FormData(form);
-
                 try {
                     const response = await fetch('{{ route('verify.otp') }}', {
                         method: "POST",
                         body: formData,
                     });
 
-                    console.log(await response.json());
+                    server_response = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(`${server_response.message}`);
+                    }
+
+                    
+                    if(response.status == 200){
+                        toastr.success('OTP Verified successfully');
+                        setTimeout(() => {
+                            window.location.href="/";
+                        }, 2000);
+                    }
                 } catch (error) {
-                    console.error(error)
+                    toastr.error(error.message);
                 }
             }
 
             async function requestNewOTPCode() {
                 try {
                     const response = await fetch('{{ route('resend.otp') }}');
-                    console.log(await response.json());
+                    server_response = await response.json();
+
+                    toastr.success(server_response.message);
                 } catch (error) {
                     console.error('Error in requesting code: ', error);
+                    toastr.success(error.message);
                 }
             }
 

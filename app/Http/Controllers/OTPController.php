@@ -32,18 +32,18 @@ class OTPController extends Controller
                 return response()->json([
                     "Response"=> $verified_otp, 
                     'Message'=>"OTP Verification Failed"
-                ], 500);
+                ], 404);
             }
 
             return response()->json([
                 "Response"=> $verified_otp, 
-                'Message'=>"OTP Verification Successfully"
+                "message"=>"OTP Verification Successfully"
             ], 200);
         } catch (Exception $e) {
             Log::info('Error: '.$e->getMessage());
             return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
+                "success" => false,
+                "message" => $e->getMessage()
             ], 400);
         }
     }
